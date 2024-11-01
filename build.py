@@ -109,11 +109,13 @@ def build_blog_index(posts: list[BlogPost]):
 def build_rss_feed(posts: list[BlogPost]):
     rss = f'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Ben Raz Blog</title><link>https://benraz.dev/blog</link><description>My beautiful blog, delivered to you with next-generation RSS technology</description><pubDate>{datetime.now().strftime(RFC_822_FORMAT)}</pubDate>{' '.join([post.to_rss() for post in posts])}</channel></rss>'
     write('/'.join([*OUT_DIR, "feed.rss"]), rss)
+def publish_changes():
+    os.system(f"cd {OUT_DIR}; git add .; git commit -sm 'Updated Website'; git push origin main")
 def main():
     build_index_page()
     build_about_page()
     posts = build_blog_posts()
     build_blog_index(posts)
-    print(build_rss_feed(posts))
+    publish_changes()
 
 main() if __name__ == "__main__" else None
