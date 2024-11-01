@@ -1,0 +1,177 @@
+/*
+ * General Settings
+ */
+
+:root {
+    --sans: "DejaVu Sans", sans-serif;
+    --mono: "DejaVu Sans Mono", monospace;
+    --fg: white;
+    --bg: #1a1a1a;
+    --red: red;
+    --green: lime;
+    --blue: #69f;
+    --magenta: magenta;
+    --orange: orange;
+    --yellow: yellow;
+    --pink: pink;
+    --code-block-bg: #0006;
+}
+
+p { line-height: 1.25rem;}
+
+* {
+    font-family: var(--sans);
+    color: var(--fg);
+    background-color: var(--bg);
+}
+
+/*
+ * Main and Footer Margin
+ */
+
+body {
+    margin: 0
+}
+
+main > *, footer {
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+/* 
+ * Footer Color & Font Size
+ */
+
+footer, footer * {
+    color: gray
+}
+
+footer {
+    margin-top: 5rem;
+    font-size: smaller;
+}
+
+footer * {
+    font-size: inherit;
+}
+
+/*
+ * Navbar Layout & Styling
+ */
+
+nav {
+    padding: 1rem 2rem;
+    margin: 0;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid white;
+    border-bottom: 2px solid #050505;
+    filter: drop-shadow(0px 5px 10px #050505);
+    position: sticky;
+    top: 0;
+    z-index: 0
+}
+
+#self-link { 
+    font-weight: bold
+}
+
+.delim {
+    color: gray;
+    user-select: none;
+}
+
+/*
+ * Timestamp Styles
+ */
+
+span.timestamp * {
+    padding: 0;
+    background-color: #0000;
+    color:gray;
+    font-family: var(--mono)
+}
+
+/*
+ * Blog Posts List
+ */
+
+li:has(span.ts, a) {
+    list-style-type: "- " 
+}
+
+li:has(span.ts, a:hover) {
+    list-style-type: "> "
+}
+
+/*
+ * Blog Post Upper Links
+ */
+
+.nav-links-container {
+    display: flex;
+    gap: 1rem;
+}
+
+/*
+ * Blog Post hr
+ */
+
+main > hr {
+    border: 0.5px solid #fff2;
+    margin-top: 1rem;
+}
+
+/*
+ * Code Block Styling
+ */
+
+code {
+    background-color: var(--code-block-bg);
+    font-family: var(--mono);
+    padding: 1px 7px 2px 7px;
+    border-radius: 5px;
+}
+
+div.sourceCode {
+    margin: 0
+}
+
+pre {
+    background-color: var(--code-block-bg);
+    margin-left: 15%;
+    margin-right: 15%;
+    padding: 1rem;
+    white-space: pre-wrap;
+    border-radius: 0.5rem;
+}
+
+pre code {
+    padding: 0;
+}
+
+pre * {
+    margin: 0;
+    font-family: var(--mono); 
+    background-color: #0000;
+}
+
+pre > code > span:first-child {
+    margin-left: 0em
+}
+
+span.kw { color: var(--red); font-weight: bold }
+span.at { color: var(--magenta); font-weight: bold } 
+span.dt { color: var(--blue) }
+span.fu { color: var(--yellow) }
+span.bu { color: var(--blue) }
+span.op { color: var(--red) }
+span.cf { color: var(--pink); font-weight: bold }
+span.co { color: var(--blue) }
+span.an { color: var(--yellow); font-weight: bold }
+span.va { color: var(--fg); font-weight: bold }
+span.st { color: var(--green) }
+span.ss { color: var(--green) }
+span.sc { color: var(--green); font-weight: bold }
+span.ch { color: var(--magenta) }
