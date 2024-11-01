@@ -68,7 +68,6 @@ class BlogPost():
         updated_date: datetime = parser.isoparse(str(parsed['updated']))
         return cls(published_date, updated_date, str(parsed['title']), parsed.content, [*BLOG_OUTDIR, file_name[-1].replace(".md", ".html")])
     def to_rss(self) -> str:
-        # FREE DIDDY
         write(".rsscontent.md", self.contents)
         os.system(f"pandoc .rsscontent.md -o .rsscontent.html")
         content_html = read(".rsscontent.html")
