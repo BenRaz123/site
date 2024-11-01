@@ -117,6 +117,6 @@ def main():
     build_about_page()
     posts = build_blog_posts()
     build_blog_index(posts)
-    publish_changes()
+    publish_changes() if '-p' in ''.join(os.environ) else None
 
 main() if __name__ == "__main__" else None
