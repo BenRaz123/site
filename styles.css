@@ -175,3 +175,26 @@ span.st { color: var(--green) }
 span.ss { color: var(--green) }
 span.sc { color: var(--green); font-weight: bold }
 span.ch { color: var(--magenta) }
+
+/*
+ * Styles for comments 
+ */
+
+summary::marker {
+    display: inline;
+}
+
+summary h2 {
+    display: inline;
+    font-size: 1.5em; 
+    margin: 0;
+    margin-left: 0.5rem;
+}
+
+summary, summary * {
+    cursor: pointer
+}
+
+div#disqus_thread {
+    margin-top: 1rem;
+}
