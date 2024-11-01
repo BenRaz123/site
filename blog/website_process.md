@@ -1,7 +1,7 @@
 ---
 title: The Process of Building This Website
-published: 2024-10-30 17:00:00
-updated: 2024-10-30 17:00:00
+published: 2024-10-30 17:00:00 -04
+updated: 2024-11-1 11:25:00 -04
 description: A description of the process behind building my website
 ---
 
@@ -117,4 +117,4 @@ I wrote a function next for getting all blog posts and building all of them. Aft
 
 ## Putting it all done
 
-To summarize, I basically created a crappy SSG with `python` and `pandoc`. If anyone for any reason wants to see it, it will be on my GitHub at one point. The script is _somewhat_ usable for other website but there are still a bunch of hard-coded values and it's probably super un-idiomatic.
+To summarize, I basically created a crappy SSG with `python` and `pandoc`. If anyone for any reason wants to see it, the site is contained in two repositories, [this one](https://github.com/benraz123/site) for the source and [this one](https://github.com/benraz123/benraz123.github.io) for the build. The script is _somewhat_ usable for other website but there are still a bunch of hard-coded values and it's probably super un-idiomatic.
