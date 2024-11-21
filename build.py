@@ -1,4 +1,5 @@
 import os
+import sys
 from dateutil import parser
 from frontmatter import load, loads
 from datetime import datetime
@@ -7,6 +8,8 @@ from dataclasses import dataclass
 TEMPLATES_DIR = ["templates"] 
 COMPONENTS_DIR = ["components"]
 OUT_DIR = ["out"]
+ASSETS_INDIR = ["assets"]
+ASSETS_OUTDIR = [*OUT_DIR, "assets"]
 BLOG_INDIR = ["blog"]
 BLOG_OUTDIR = [*OUT_DIR, "blog"]
 
@@ -100,23 +103,38 @@ def build_blog_posts() -> list[BlogPost]:
 def build_blog_index(posts: list[BlogPost]):
     markdown = "---\ntitle: Blog - Ben Raz\n---\n\n# Blog [(RSS)](/feed.rss)\n"
     for post in reversed(sorted(posts)):
-        formatted_date = post.published_date.strftime("[%Y-%m-%d %Z]")
+        formatted_date = post.published_date.strftime("(%B %Y)")
         markdown += \
                 f"- <a href='{'/'+'/'.join(post.location[1:])}'>\"{post.title}\"</a> <span class='timestamp'>`{formatted_date}`</span> \n"
     write(".blogpostindex.md", markdown)
     build_page(".blogpostindex.md", BLOG_OUTPUT, PAGE_TEMPLATE, DEFAULT_ARGS)
     os.remove(".blogpostindex.md")
 def build_rss_feed(posts: list[BlogPost]):
-    rss = f'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Ben Raz Blog</title><link>https://benraz.dev/blog</link><description>My beautiful blog, delivered to you with next-generation RSS technology</description><pubDate>{datetime.now().strftime(RFC_822_FORMAT)}</pubDate>{' '.join([post.to_rss() for post in posts])}</channel></rss>'
+    print("[INFO] Building RSS Feed")
+    rss = f'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Ben Raz Blog</title><link>https://benraz.dev/blog</link><description>My beautiful blog, delivered to you with next-generation RSS technology</description><pubDate>{datetime.now().strftime(RFC_822_FORMAT)}</pubDate>{' '.join([post.to_rss() for post in reversed(posts)])}</channel></rss>'
     write('/'.join([*OUT_DIR, "feed.rss"]), rss)
 def publish_changes():
     print("[INFO] Publishing Changes")
     os.system(f"cd {OUT_DIR[0]}; git add .; git commit -sm 'Updated Website'; git push origin main 0>/dev/null")
+def transfer_assets():
+    print("[INFO] Transferring Assets")
+    try: 
+        os.mkdir('/'.join(ASSETS_OUTDIR))
+    except:
+        pass
+    for asset in os.listdir('/'.join(ASSETS_INDIR)):
+        print(f"[INFO] Transferring Asset {asset}")
+        in_path = '/'.join([*ASSETS_INDIR, asset])
+        out_path = '/'.join([*ASSETS_OUTDIR, asset])
+        os.system(f"cp {in_path} {out_path}")
+
 def main():
     build_index_page()
     build_about_page()
     posts = build_blog_posts()
     build_blog_index(posts)
-    publish_changes() if '-p' in ''.join(os.environ) else None
+    build_rss_feed(posts)
+    transfer_assets()
+    publish_changes() if '-p' in ' '.join(sys.argv) else None 
 
 main() if __name__ == "__main__" else None

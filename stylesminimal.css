@@ -2,39 +2,20 @@
  * General Settings
  */
 
-@font-face {
-    font-family: "cantvf";
-    src: url('/assets/Cantarell-VF.woff2') format('woff2')
-}
-
 :root {
-    --sans: "cantvf", "Verdana", "Tahoma", sans-serif;
+    --sans: "DejaVu Sans", "Verdana", "Tahoma", sans-serif;
     --mono: "DejaVu Sans Mono", monospace;
-    --red: darkred;
-    --green: darkgreen;
-    --blue: blue;
-    --magenta: darkmagenta;
-    --orange: darkorange;
-    --yellow: darkgoldenrod;
-    --pink: fuchsia;
-    --code-block-bg: #0002;
+    --fg: white;
+    --bg: #1a1a1a;
+    --red: red;
+    --green: lime;
+    --blue: #69f;
+    --magenta: magenta;
+    --orange: orange;
+    --yellow: yellow;
+    --pink: pink;
+    --code-block-bg: #0006;
 }
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --fg: white;
-        --accent: #7744aa;
-        --bg: #161616;
-    }
-}
-@media (prefers-color-scheme: light) {
-    :root {
-        --fg: black;
-        --bg: white;
-        --accent: rebeccapurple;
-    }
-}
-
 
 p { line-height: 1.25rem;}
 
@@ -42,28 +23,6 @@ p { line-height: 1.25rem;}
     font-family: var(--sans);
     color: var(--fg);
     background-color: var(--bg);
-}
-
-h1, h2 {
-    font-weight: 900;
-}
-
-a {
-    color: var(--accent)
-}
-
-h1 {
-    font-size: 2.5rem;
-    font-weight: 800;
-}
-
-/*
- * Text Selection
- */
-
-*::selection {
-    background-color: var(--accent);
-    color: var(--bg);
 }
 
 /*
@@ -107,15 +66,11 @@ nav {
     display: flex;
     justify-content: space-between;
     border-top: 1px solid white;
-    border-bottom: 2px solid var(--accent);
-    /*filter: drop-shadow(0px 5px 10px #050505);*/
+    border-bottom: 2px solid #050505;
+    filter: drop-shadow(0px 5px 10px #050505);
     position: sticky;
     top: 0;
     z-index: 0
-}
-
-nav a {
-    color: var(--fg);
 }
 
 #self-link { 
@@ -229,91 +184,21 @@ span.ch { color: var(--magenta) }
  * Styles for comments 
  */
 
-
-summary, summary * {
-    cursor: pointer;
-}
 summary::marker {
     display: inline;
 }
 
 summary h2 {
     display: inline;
-    font-size: 1.5em;
+    font-size: 1.5em; 
     margin: 0;
     margin-left: 0.5rem;
 }
 
+summary, summary * {
+    cursor: pointer
+}
+
 div#disqus_thread {
     margin-top: 1rem;
-}
-
-/*
- * Notes & Other Admonitions
- */
-div[class]:has(p) {
-    /*
-     * Kind of Like a Class
-     */
-
-    /*
-     ** Variables
-     */
-    --bg-color: lightgray;
-    --before-fg-color: white;
-    --before-bg-color: gray;
-    
-
-    margin-top: 1rem;
-    background-color: var(--bg-color);
-    padding: 0.2rem 0.5rem;
-    border-radius: 1rem ;
-    
-    & p {
-        color: black;
-        background-color: var(--bg-color);
-    }
-
-    & >* {
-        padding: 0.2rem 0.5rem;
-    }
-
-    & > div.sourceCode {
-        padding: 0;
-        margin: 0;
-        & > pre {
-            margin: 0;
-        }
-    } 
-
-    &:hover::before {
-        margin-left: -2em;
-    }
-
-    &::before {
-        color: var(--before-fg-color);
-        background-color: var(--before-bg-color);
-        padding: 0.5rem;
-        text-transform: capitalize;
-        content: attr(class);
-        top -0.3em;
-        margin-left: -1em;
-        font-weight: bold;
-        transition: margin-left 0.3s;
-    }
-    & p::selection  {
-        background-color: var(--before-bg-color);
-        color: var(--before-fg-color)
-    }
-}
-
-div.warning:has(p) { 
-    --bg-color: #faa; 
-    --before-bg-color: red;
-}
-
-div.note:has(p) {
-    --bg-color: lightyellow;
-	--before-bg-color: yellow;
-	--before-fg-color: black
 }
