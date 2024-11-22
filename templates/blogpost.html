@@ -1,15 +1,20 @@
 <title>$title$ - Ben Raz Blog</title>
+<body $if(wip)$
+	wip
+	$endif$>
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v21.0"></script>
 $nav$
-<main>
-		<div class="nav-links-container"><a href="/">&lt;&lt; home</a><a href="/blog">&lt; blog</a></div>
+<main >
+	<div class="nav-links-container"><a href="/">&lt;&lt; home</a><noscript class="hide"> </noscript><a href="/blog">&lt; blog</a></div>
 		<h1>$title$</h1>
 		<span class="timestamp"><code>[Published $published$]</code></span><br>
 		<span class="timestamp"><code>[Updated $updated$]</code></span>
 		<hr>
 		$body$
 	<hr>
-        <details class="comments"><summary><h2>Comments (Disqus)</h2></summary>
-        <div id="disqus_thread"></div>
+    <details class="comments"><summary><h2>Comments (Disqus)</h2></summary><div id="disqus_thread"></div></details>
+	<details class="comments"><summary><h2>Comments (Facebook)</h2></summary><div class="fb-comments" data-href="$url$" data-width="" data-numposts="10"></div></details>
     <script>
     /**
     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
@@ -31,6 +36,7 @@ $nav$
         </details>
 </main>
 $foot$
+</body>
 <style>
 $styles$
 </style>

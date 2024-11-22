@@ -115,6 +115,12 @@ Why so many properties? The main reason was I wanted to be able to sort, list, a
 
 I wrote a function next for getting all blog posts and building all of them. After a little `CSS`, it's all done.
 
-## Putting it all done
+## Putting it all Together 
 
-To summarize, I basically created a crappy SSG with `python` and `pandoc`. If anyone for any reason wants to see it, the site is contained in two repositories, [this one](https://github.com/benraz123/site) for the source and [this one](https://github.com/benraz123/benraz123.github.io) for the build. The script is _somewhat_ usable for other website but there are still a bunch of hard-coded values and it's probably super un-idiomatic.
+::: warning
+WARNING:
+
+While effort was made to make the script generic, it still contains a lot of hardcoded values. Additionally, it is not well-written or tested so do not expect for it to work. If you don't want to get down and dirty in the details, don't use it. There are plenty of SSGs around and I don't want to rob you of the fun of writing your own.
+:::
+
+To summarize, I basically created a crappy SSG with `python` and `pandoc`. If anyone for any reason wants to see it, the site is contained in two repositories, [this one](https://github.com/benraz123/site) for the source and [this one](https://github.com/benraz123/benraz123.github.io) for the build. 

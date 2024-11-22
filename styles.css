@@ -163,6 +163,11 @@ li::marker {
     gap: 1rem;
 }
 
+/* This element is only supposed to show when CSS and JS are disabled */
+noscript.hide {
+    display: none;
+}
+
 /*
  * Blog Post hr
  */
@@ -230,6 +235,10 @@ span.ch { color: var(--magenta) }
  */
 
 
+details {
+    margin-top : 1rem;
+}
+
 summary, summary * {
     cursor: pointer;
 }
@@ -296,24 +305,52 @@ div[class]:has(p) {
         padding: 0.5rem;
         text-transform: capitalize;
         content: attr(class);
-        top -0.3em;
         margin-left: -1em;
         font-weight: bold;
         transition: margin-left 0.3s;
     }
     & p::selection  {
         background-color: var(--before-bg-color);
-        color: var(--before-fg-color)
+        color: var(--before-fg-color);
+    }
+    & > p:first-child{
+	display: none;
     }
 }
 
-div.warning:has(p) { 
+div.warning:has(p) {   
     --bg-color: #faa; 
-    --before-bg-color: red;
+    --before-bg-color: red; 
 }
 
-div.note:has(p) {
+div.note:has(p), div.disclaimer:has(p) {
     --bg-color: lightyellow;
-	--before-bg-color: yellow;
-	--before-fg-color: black
+    --before-bg-color: yellow;
+    --before-fg-color: black
+}
+
+/*
+ * WIP Banner
+ */
+
+[wip]::before {
+    content: "WORK IN PROGRESS";
+    background: repeating-linear-gradient(-55deg,
+        #000000, #000000 15px,
+        #e2d529 15px, #e2d529 30px);
+    display: block;
+    width: 100%;
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+    padding: 0.5em 0;
+    text-align: center;
+    border-radius: 0rem 0rem 1rem 1rem;
+    position: sticky;
+    text-shadow:
+        1px 1px 2px black,
+        1px -1px 2px black,
+        -1px 1px 2px black,
+        -1px -1px 2px black;   
+    top: 2;
 }

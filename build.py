@@ -77,17 +77,30 @@ class BlogPost():
         os.remove(".rsscontent.md")
         os.remove(".rsscontent.html")
         return f"<item><title>{self.title}</title><link>https://benraz.dev/{'/'.join(self.location[1:])}</link><description>{content_html}</description><pubDate>{self.published_date.strftime(RFC_822_FORMAT)}</pubdate></item>"
-def build_page(input_page: str | Path, output_page: str | Path, template: str | Path, args: dict[str, str]):
+
+def is_release() -> bool:
+    return '-p' in ''.join(sys.argv) or '--publish' in ''.join(sys.argv)
+def clear_outdir():
+    print('[INFO] Clearing output directory')
+    os.system(f"rm -rf {'/'.join(OUT_DIR)}/*")
+    os.system(f"mkdir -p {'/'.join(ASSETS_OUTDIR)}")
+    os.system(f"mkdir -p {'/'.join(BLOG_OUTDIR)}")
+    write('/'.join([*OUT_DIR, "CNAME"]), "benraz.dev")
+def build_page(input_page: str | Path, output_page: str | Path, template: str | Path, args: dict[str, str], kvargs: dict[str, str] = {}):
     if isinstance(input_page, list):
         input_page = "/".join(input_page)
     if isinstance(output_page, list):
         output_page = "/".join(output_page)
     if isinstance(template, list):
-        template = "/".join(template)
+        template = "/".join(template) 
     print(f"[INFO] Transforming Page '{input_page}' into Page '{output_page}' with Template '{template}'")
     command = f"pandoc '{input_page}' -o '{output_page}' --template '{template}' "
     for (arg, val) in args.items():
         command += f"-V {arg}=\"$(cat {val})\" "
+    for (arg, val) in kvargs.items():
+        command += f"-V {arg}=\"{val}\" "
+    if not is_release():
+        command += "-V wip=\"true\""
     os.system(command)
 def build_index_page():
     build_page(INDEX_INPUT, INDEX_OUTPUT, PAGE_TEMPLATE, DEFAULT_ARGS)
@@ -97,8 +110,11 @@ def build_blog_posts() -> list[BlogPost]:
     posts = []
     for file in os.listdir("/".join(BLOG_INDIR)):
         post = BlogPost.from_file([*BLOG_INDIR, file])
+        if is_release() and post.title.startswith("(WIP)"):
+            continue
         posts.append(post)
-        build_page([*BLOG_INDIR, file], post.location, BLOGPOST_TEMPLATE, DEFAULT_ARGS)
+        url = f"https://benraz.dev/{'/'.join(post.location[1:])}"
+        build_page([*BLOG_INDIR, file], post.location, BLOGPOST_TEMPLATE, DEFAULT_ARGS, {'url': url})
     return posts
 def build_blog_index(posts: list[BlogPost]):
     markdown = "---\ntitle: Blog - Ben Raz\n---\n\n# Blog [(RSS)](/feed.rss)\n"
@@ -129,6 +145,7 @@ def transfer_assets():
         os.system(f"cp {in_path} {out_path}")
 
 def main():
+    clear_outdir()
     build_index_page()
     build_about_page()
     posts = build_blog_posts()
