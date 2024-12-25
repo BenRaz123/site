@@ -1,5 +1,6 @@
 import os
 import sys
+import re
 from dateutil import parser
 from frontmatter import load, loads
 from datetime import datetime
@@ -22,23 +23,24 @@ FOOTER = [*COMPONENTS_DIR, "footer.html"]
 INDEX_INPUT = ["index.md"]
 ABOUT_INPUT = ["about.md"]
 
-STYLE = ["styles.css"]
+MODIFIED_STYLES = [".compliantstyles.css"]
+STYLES = ["styles.css"]
 
 INDEX_OUTPUT = [*OUT_DIR, "index.html"]
 ABOUT_OUTPUT = [*OUT_DIR, "about.html"]
 BLOG_OUTPUT = [*BLOG_OUTDIR, "index.html"]
 
-DEFAULT_ARGS = { "nav": "/".join(NAVBAR), "foot": "/".join(FOOTER), "styles": "/".join(STYLE) }
+DEFAULT_ARGS = { "nav": "/".join(NAVBAR), "foot": "/".join(FOOTER), "styles": "/".join(STYLES) }
 
 RFC_822_FORMAT = "%a, %d %b %Y %H:%M:%S +0000"
 
 def write(f, c):
-    with open(f, "w") as w:
-        w.write(c)
+     with open(f, "w") as w:
+         w.write(c)
 def read(f) -> str:
-    with open(f, "r") as r:
-        return r.read()
-
+     with open(f, "r") as r:
+         return r.read()
+ 
 ## TYPES ##
 
 # Path #
@@ -72,12 +74,29 @@ class BlogPost():
         return cls(published_date, updated_date, str(parsed['title']), parsed.content, [*BLOG_OUTDIR, file_name[-1].replace(".md", ".html")])
     def to_rss(self) -> str:
         write(".rsscontent.md", self.contents)
-        os.system(f"pandoc .rsscontent.md -o .rsscontent.html")
+        os.system(f"pandoc .rsscontent.md --lua-filter=\"filter.lua\" -f markdown+emoji -o .rsscontent.html")
         content_html = read(".rsscontent.html")
         os.remove(".rsscontent.md")
         os.remove(".rsscontent.html")
         return f"<item><title>{self.title}</title><link>https://benraz.dev/{'/'.join(self.location[1:])}</link><description>{content_html}</description><pubDate>{self.published_date.strftime(RFC_822_FORMAT)}</pubdate></item>"
 
+def modify_styles():
+    print("[INFO] Modifying CSS Stylesheet to make it compatible with older browsers")
+    os.system(f"postcss {'/'.join(STYLES)} -u postcss-preset-env -o {'/'.join(MODIFIED_STYLES)}")
+    os.remove("/".join(MODIFIED_STYLES))
+
+def modify_admonitions(f: list[str] | str) -> str:
+    if isinstance(f, list):
+        f = '/'.join(f)
+    content = read(f)
+    result = re.sub(
+        '::: (\\w+).?\n',
+        lambda m: f"::: {m.group(1)}\n{m.group(1).upper()}:\n\n", 
+        content,
+        flags=re.DOTALL
+    )
+    write(f, result)
+    return content
 def is_release() -> bool:
     return '-p' in ''.join(sys.argv) or '--publish' in ''.join(sys.argv)
 def clear_outdir():
@@ -94,7 +113,7 @@ def build_page(input_page: str | Path, output_page: str | Path, template: str | 
     if isinstance(template, list):
         template = "/".join(template) 
     print(f"[INFO] Transforming Page '{input_page}' into Page '{output_page}' with Template '{template}'")
-    command = f"pandoc '{input_page}' -o '{output_page}' --template '{template}' "
+    command = f"pandoc  '{input_page}' --lua-filter='filter.lua' -f markdown+emoji -o '{output_page}' --template '{template}' "
     for (arg, val) in args.items():
         command += f"-V {arg}=\"$(cat {val})\" "
     for (arg, val) in kvargs.items():
@@ -109,12 +128,16 @@ def build_about_page():
 def build_blog_posts() -> list[BlogPost]:
     posts = []
     for file in os.listdir("/".join(BLOG_INDIR)):
+        #orig_contents = modify_admonitions([*BLOG_INDIR, file])
         post = BlogPost.from_file([*BLOG_INDIR, file])
         if is_release() and post.title.startswith("(WIP)"):
             continue
         posts.append(post)
         url = f"https://benraz.dev/{'/'.join(post.location[1:])}"
-        build_page([*BLOG_INDIR, file], post.location, BLOGPOST_TEMPLATE, DEFAULT_ARGS, {'url': url})
+        if post.updated_date != post.published_date:
+            build_page([*BLOG_INDIR, file], post.location, BLOGPOST_TEMPLATE, DEFAULT_ARGS, {'url': url, 'showupdated': "true"})
+        else:
+            build_page([*BLOG_INDIR, file], post.location, BLOGPOST_TEMPLATE, DEFAULT_ARGS, {'url': url})
     return posts
 def build_blog_index(posts: list[BlogPost]):
     markdown = "---\ntitle: Blog - Ben Raz\n---\n\n# Blog [(RSS)](/feed.rss)\n"
@@ -146,6 +169,7 @@ def transfer_assets():
 
 def main():
     clear_outdir()
+    modify_styles()
     build_index_page()
     build_about_page()
     posts = build_blog_posts()

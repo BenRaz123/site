@@ -1,42 +1,110 @@
-<title>$title$ - Ben Raz Blog</title>
-<body $if(wip)$
-	wip
-	$endif$>
-<div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v21.0"></script>
-$nav$
-<main >
-	<div class="nav-links-container"><a href="/">&lt;&lt; home</a><noscript class="hide"> </noscript><a href="/blog">&lt; blog</a></div>
-		<h1>$title$</h1>
-		<span class="timestamp"><code>[Published $published$]</code></span><br>
-		<span class="timestamp"><code>[Updated $updated$]</code></span>
-		<hr>
-		$body$
-	<hr>
-    <details class="comments"><summary><h2>Comments (Disqus)</h2></summary><div id="disqus_thread"></div></details>
-	<details class="comments"><summary><h2>Comments (Facebook)</h2></summary><div class="fb-comments" data-href="$url$" data-width="" data-numposts="10"></div></details>
-    <script>
-    /**
-    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
-    /*
-    var disqus_config = function () {
-    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    */
-    (function() { // DON'T EDIT BELOW THIS LINE
-    var d = document, s = d.createElement('script');
-    s.src = 'https://benrazdev.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        </details>
-</main>
-$foot$
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>$title$ - Ben Raz Blog</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+
+<body blogpost $if(wip)$ wip $endif$>
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v21.0"></script>
+    $nav$
+    <div class="main-container">
+        <main>
+            <div class="nav-links-container-container">
+                <div class="nav-links-container">
+                    <a href="/">&lt;&lt; home</a><noscript class="hide">
+                    </noscript>
+                    <a href="/blog">&lt; blog</a>
+                </div>
+                <!--
+                <div class="share-links-container">
+                    <select id="share-links" onchange="location=this.value">
+                        <option value="#" hidden disabled selected>Share &gt;&gt;</option>
+                        <optgroup label="Twitter & Co">
+                            <option value="https://x.com/intent/post?url=$url$">X (Twitter) &gt;&gt;</option>
+                            <option value="https://bsky.app/intent/compose?text=$url$">Bluesky &gt;&gt;</option>
+                            <option value="https://mastodonshare.com/?url=$url$">Mastodon &gt;&gt;</option>
+                        </optgroup>
+                        <optgroup label="misc">
+                            <option value="https://www.facebook.com/sharer/sharer.php?u=$url$">FaceBook&gt;&gt;</option>
+                        </optgroup>
+                    </select>
+                </div>
+                -->
+                <a onclick="document.querySelector('#share').showModal()" href="#">share &gt;&gt;</a>
+                <dialog id="share">
+                    <div class="dialog-content">
+                        <header>Select a Platform</header>
+                        <ul>
+                            <a target="_blank" onclick="document.querySelector('#share').close()" href="https://x.com/intent/post?url=$url$"><li>X (Twitter)</li></a>
+                            <a target="_blank" onclick="document.querySelector('#share').close()" href="https://bsky.app/intent/compose?text=$url$"><li>Bluesky</li></a>
+                            <a target="_blank" onclick="document.querySelector('#share').close()" href="https://mastodonshare.com/?url=$url$"><li>Mastodon</li></a>
+                            <a target="_blank" onclick="document.querySelector('#share').close()" href="https://www.facebook.com/sharer/sharer.php?u=$url$"><li>FaceBook</li></a>
+                            <a target="_blank" onclick="document.querySelector('#share').close()" href="https://news.ycombinator.com/submitlink?u=$url$"><li>Hacker News</li></a>
+                        </ul>
+                    </div>
+                    <div class="dialog-buttons" onclick="document.querySelector('#share').close();">
+                        <form method="dialog">
+                            <button type="submit">Close</button>
+                        </form>
+                    </div>
+                </dialog>
+            </div>
+            <h1>$title$</h1>
+            <span class="timestamp"><code>[Published $published$]</code></span><br>
+            $if(showupdated)$
+            <span class="timestamp"><code>[Updated $updated$]</code></span>
+            $endif$
+            <hr>
+            $body$
+            <hr>
+            <details class="comments">
+                <summary>
+                    <h2>Comments (Disqus)</h2>
+                </summary>
+                <div id="disqus_thread"></div>
+            </details>
+            <details class="comments">
+                <summary>
+                    <h2>Comments (Facebook)</h2>
+                </summary>
+                <div class="fb-comments" data-href="$url$" data-width="" data-numposts="10">
+                </div>
+            </details>
+            <script>
+                /**
+                *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+                /*
+                var disqus_config = function () {
+                this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                };
+                */
+                (function () { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://benrazdev.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered
+                    by Disqus.</a></noscript>
+            </details>
+            $foot$
+        </main>
+    </div>
 </body>
 <style>
-$styles$
+    $styles$
 </style>
+<script>
+    document.querySelectorAll('div.sourceCode').map(a => {console.log(a)})
+</script>
+
+</html>

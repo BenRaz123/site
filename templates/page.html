@@ -1,9 +1,18 @@
-<body $if(wip)$
-	wip
-	$endif$>
-<title>$title$</title>
-$nav$
-<main>$body$</main>
-$foot$
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>$title$</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+
+<body $if(wip)$ wip $endif$>
+	$nav$
+	<div class="main-container">
+		<main>$body$$foot$</main>
+	</div>
 </body>
 <style>$styles$</style>
+</html>

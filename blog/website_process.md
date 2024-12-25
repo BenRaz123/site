@@ -5,6 +5,10 @@ updated: 2024-11-1 11:25:00 -04
 description: A description of the process behind building my website
 ---
 
+::: info
+The source for this website can be found on my Github at [this link](https://github.com/benraz123/site). This site is hosted at [this link](https://github.com/benraz123/benraz123.github.io).
+:::
+
 Welcome again to my brand-new website! I hope it doesn't look too terrible. I wanted to, in an act of supreme originality, dedicate my first blog post to documenting the process used to conjure up this website, READMEs be damned. 
 
 ## The Original Idea
@@ -118,8 +122,6 @@ I wrote a function next for getting all blog posts and building all of them. Aft
 ## Putting it all Together 
 
 ::: warning
-WARNING:
-
 While effort was made to make the script generic, it still contains a lot of hardcoded values. Additionally, it is not well-written or tested so do not expect for it to work. If you don't want to get down and dirty in the details, don't use it. There are plenty of SSGs around and I don't want to rob you of the fun of writing your own.
 :::
 
