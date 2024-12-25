@@ -1,7 +1,7 @@
 ---
 title: What is Trump's Policy on NATO & Ukraine?
-published: 2024-11-30 12:04:00-08
-updated: 2024-11-30 12:04:00-08
+published: 2024-11-30 12:04:00 -08
+updated: 2024-11-30 12:04:00 -08
 ---
 
 ::: disclaimer

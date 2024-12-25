@@ -1,4 +1,5 @@
 import os
+import random
 import sys
 import re
 from dateutil import parser
@@ -140,11 +141,29 @@ def build_blog_posts() -> list[BlogPost]:
             build_page([*BLOG_INDIR, file], post.location, BLOGPOST_TEMPLATE, DEFAULT_ARGS, {'url': url})
     return posts
 def build_blog_index(posts: list[BlogPost]):
-    markdown = "---\ntitle: Blog - Ben Raz\n---\n\n# Blog [(RSS)](/feed.rss)\n"
+    markdown = "---\ntitle: Blog - Ben Raz\n---\n\n# Blog [(RSS)](/feed.rss)\n<ul class='blogposts'>\n"
     for post in reversed(sorted(posts)):
-        formatted_date = post.published_date.strftime("(%B %Y)")
+        formatted_date = post.published_date.strftime("%B %Y")
         markdown += \
-                f"- <a href='{'/'+'/'.join(post.location[1:])}'>\"{post.title}\"</a> <span class='timestamp'>`{formatted_date}`</span> \n"
+                f"<li><a href='{'/'+'/'.join(post.location[1:])}'>{post.title}</a> <span class='timestamp'>{formatted_date}</span></li>\n"
+    markdown += "</ul>"
+    markdown += f"""
+<script>
+function choose(choices) {{
+var index = Math.floor(Math.random() * choices.length);
+return choices[index];
+}}
+let list = document.querySelectorAll('ul')[0];
+let randomPost = choose({["/" + '/'.join(post.location[1:]) for post in posts]});
+let randomPostElem = document.createElement('li');
+randomPostElem.setAttribute("id", "random-post");
+let link = document.createElement("a");
+link.setAttribute("href", randomPost);
+link.innerHTML = "Random Post";
+randomPostElem.appendChild(link);
+list.appendChild(randomPostElem);
+</script>
+    """
     write(".blogpostindex.md", markdown)
     build_page(".blogpostindex.md", BLOG_OUTPUT, PAGE_TEMPLATE, DEFAULT_ARGS)
     os.remove(".blogpostindex.md")

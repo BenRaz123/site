@@ -55,11 +55,13 @@
                     </div>
                 </dialog>
             </div>
-            <h1>$title$</h1>
-            <span class="timestamp"><code>[Published $published$]</code></span><br>
+	    <hgroup>
+	    <h1>$title$</h1>
+            <span>Published $published$</span><br>
             $if(showupdated)$
-            <span class="timestamp"><code>[Updated $updated$]</code></span>
+            <span>Updated $updated$</span>
             $endif$
+	    </hgroup>
             <hr>
             $body$
             <hr>
