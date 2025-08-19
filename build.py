@@ -2,6 +2,7 @@ import os
 import random
 import sys
 import re
+import shutil
 from dateutil import parser
 from frontmatter import load, loads
 from datetime import datetime
@@ -20,18 +21,22 @@ BLOGPOST_TEMPLATE = [*TEMPLATES_DIR, "blogpost.html"]
 
 NAVBAR = [*COMPONENTS_DIR, "navbar.html"]
 FOOTER = [*COMPONENTS_DIR, "footer.html"]
+PROJECTS_COMPONENT = [*COMPONENTS_DIR, "projects.html"]
 
 INDEX_INPUT = ["index.md"]
-ABOUT_INPUT = ["about.md"]
+PROJECTS_INPUT = ["projects.md"]
+SOCIAL_INPUT = ["social.md"]
 
 MODIFIED_STYLES = [".compliantstyles.css"]
 STYLES = ["styles.css"]
 
 INDEX_OUTPUT = [*OUT_DIR, "index.html"]
-ABOUT_OUTPUT = [*OUT_DIR, "about.html"]
+PROJECT_OUTPUT = [*OUT_DIR, "projects.html"]
 BLOG_OUTPUT = [*BLOG_OUTDIR, "index.html"]
+SOCIAL_OUTPUT = [*OUT_DIR, "social.html"]
 
 DEFAULT_ARGS = { "nav": "/".join(NAVBAR), "foot": "/".join(FOOTER), "styles": "/".join(STYLES) }
+
 
 RFC_822_FORMAT = "%a, %d %b %Y %H:%M:%S +0000"
 
@@ -124,8 +129,11 @@ def build_page(input_page: str | Path, output_page: str | Path, template: str | 
     os.system(command)
 def build_index_page():
     build_page(INDEX_INPUT, INDEX_OUTPUT, PAGE_TEMPLATE, DEFAULT_ARGS)
-def build_about_page():
-    build_page(ABOUT_INPUT, ABOUT_OUTPUT, PAGE_TEMPLATE, DEFAULT_ARGS)
+def build_social_page():
+    build_page(SOCIAL_INPUT, SOCIAL_OUTPUT, PAGE_TEMPLATE, DEFAULT_ARGS)
+def build_project_page():
+    #shutil.copyfile('/'.join(PROJECTS_COMPONENT), '/'.join(PROJECT_OUTPUT))
+    build_page(PROJECTS_INPUT, PROJECT_OUTPUT, PROJECTS_COMPONENT, DEFAULT_ARGS)
 def build_blog_posts() -> list[BlogPost]:
     posts = []
     for file in os.listdir("/".join(BLOG_INDIR)):
@@ -190,10 +198,11 @@ def main():
     clear_outdir()
     modify_styles()
     build_index_page()
-    build_about_page()
+    build_social_page()
     posts = build_blog_posts()
     build_blog_index(posts)
     build_rss_feed(posts)
+    build_project_page()
     transfer_assets()
     publish_changes() if '-p' in ' '.join(sys.argv) else None 
 

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Projects - Ben Raz</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+
+<body $if(wip)$ wip $endif$>
+	$nav$
+	<div class="main-container">
+		<main>
+			<h1>Projects</h1>
+            <h2 id="featured">Featured Projects</h2>
+            <div class="project">
+                <div>
+                    <div>
+                        <h2>Hex Playground</h2>
+                        <p>A simple website that lets you view and play with hex codes. Written in plain javascript.</p>
+                    </div>
+                    <a  href="https://github.com/benraz123/hexplayground">Source Code</a>
+                </div>
+                <a id="hexplaygroundurl" target="_blank" href="https://benraz.dev/hexplayground"><img src="/assets/hexplayground_logo_light.png"></a>
+            </div>
+            <div class="project">
+                <div>
+                    <div>
+                        <h2>Journal Application (jrn)</h2>
+                        <p>A comprehensive a secure journaling application that prioritizes security, modularity, and scriptability. Written entirely in Rust.</p>
+                    </div>
+                    <a  href="https://github.com/benraz123/jrn">Source Code</a>
+                </div>
+                <a href="https://crates.io/crates/jrn" target="_blank"><img src="/assets/jrn.png"></a>
+            </div>
+			<h2 id="links">Platform Links</h2>
+			<p>Here are all of the platforms where my code is hosted:</p>
+			<ul>
+				<li><a href="https://github.com/BenRaz123">Github</a></li>
+				<li><a href="https://crates.io/users/BenRaz123?sort=recent-updates">Crates.io</a></li>
+			</ul>
+			<h2 id="projs">Github Projects</h2>
+			<ul id="gh-projects">
+				<noscript>Please Enable Javascript to see a list of github projects</noscript>
+			</ul>
+			$foot$
+		</main>
+	</div>
+</body>
+<style>
+	$styles$
+</style>
+<script type="module">
+
+    const hexplaygroundurl = document.querySelector("#hexplaygroundurl");
+    hexplaygroundurl.setAttribute("href", 'https://benraz.dev/hexplayground?color=' + window.getComputedStyle(document.body).getPropertyValue('--accent').replaceAll("#", ""));
+
+	import {Octokit} from 'https://esm.sh/@octokit/rest';
+
+	// Create an Octokit instance without authentication
+	const octokit = new Octokit();
+
+	// Example: Fetch public repositories for a user
+	async function fetchRepos(username, page) {
+		try {
+			await delay(1000);
+			const response = await octokit.request('GET /users/{username}/repos', {
+				username: username,
+				per_page: 100,
+				page: page,
+			});
+			console.log(response.data);
+			return response.data;
+		} catch (error) {
+			console.error('Error fetching repositories:', error);
+			return [];
+		}
+	}
+	function delay(ms) {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+	async function fetchAllRepos(u) {
+		let page = 1;
+		let resp;
+		let res = [];
+		do {
+			resp = await setTimeout(() => fetchRepos(u, page), 1000);
+			console.log(resp);
+			res.concat(resp);
+			page++;
+			// manual intervention
+			if (page > 10) {break;}
+		} while (resp.length > 0);
+	}
+
+	const createListItem = (repo) => {
+		let li = document.createElement("li");
+
+		let name = document.createElement("a");
+		name.innerHTML = repo.name;
+		name.setAttribute("href", repo.clone_url);
+		li.appendChild(name);
+
+		let moreInfoContainer = document.createElement("div");
+		moreInfoContainer.setAttribute("class", "more-info-container");
+		li.appendChild(moreInfoContainer);
+
+		let lang = document.createElement("span");
+		lang.innerHTML = repo.language ? "Written in " + repo.language + ". " : "";
+		moreInfoContainer.appendChild(lang);
+
+		createMoreElem(repo, moreInfoContainer);
+
+		document.querySelector("#gh-projects").appendChild(li);
+	}
+
+	function createMoreElem(r, e) {
+		const TO_DISPLAY = new Map([
+			["Number of Forks", r.forks_count],
+			["Default Branch", r.default_branch],
+			["Last Modified", new Date(r.pushed_at)],
+			["Open Issues", r.open_issues_count],
+			["Is Archived", r.archived],
+			["Description", r.description || "None given"],
+			["Created at", new Date(r.created_at)],
+			["Watching", r.watchers],
+			["Stars", r.stargazers_count],
+		]);
+
+		const safeName = r.name.replaceAll(".", "dot");
+
+		let moreLink = document.createElement("a");
+		moreLink.href = "#";
+		moreLink.setAttribute("onclick", "document.querySelector('#" + safeName + "-info').showModal()");
+		moreLink.innerHTML = "(More)";
+		e.appendChild(moreLink);
+
+		let more = document.createElement("dialog");
+		more.setAttribute('id', safeName + "-info");
+		e.appendChild(more);
+
+		let moreContainer = document.createElement("div");
+		moreContainer.classList = "dialog-content";
+		more.appendChild(moreContainer);
+
+		let moreHeader = document.createElement("header");
+		moreHeader.innerHTML = `More on "` + r.name + "\"";
+		moreContainer.appendChild(moreHeader);
+
+		let moreList = document.createElement("dl");
+		moreContainer.appendChild(moreList);
+
+		TO_DISPLAY.forEach((value, key) => {
+			let detailsContainer = document.createElement("div");
+			detailsContainer.classList = "details-container";
+			moreList.appendChild(detailsContainer);
+
+			let details = document.createElement("details");
+			detailsContainer.appendChild(details);
+
+			let keytext = document.createElement("summary");
+			keytext.innerHTML = key;
+			details.appendChild(keytext);
+
+			let valuetext = document.createElement("p");
+			valuetext.innerHTML = value;
+			details.appendChild(valuetext);
+		})
+
+		let buttonContainer = document.createElement("div");
+		buttonContainer.classList = "dialog-buttons";
+		buttonContainer.setAttribute("onclick", "document.querySelector('#" + safeName + "-info').close()");
+		more.appendChild(buttonContainer);
+
+		let form = document.createElement("form");
+		form.setAttribute("method", "dialog");
+		buttonContainer.appendChild(form);
+
+		let button = document.createElement("button");
+		button.innerHTML = "Close";
+		button.setAttribute("onclick", "document.querySelector('#" + safeName + "-info').close()");
+		form.appendChild(button);
+	}
+
+	async function getData() {
+		let from_ls = window.localStorage.getItem("ghrepos");
+		if (from_ls != null) {
+			return JSON.parse(from_ls);
+		}
+
+		let repos = await fetchRepos('BenRaz123', 1);
+		repos.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+		localStorage.setItem('ghrepos', JSON.stringify(repos));
+		return repos;
+	}
+	// Fetch repositories for a specific user
+	async function main() {
+		let repos = await getData();
+		repos.forEach((r) => createListItem(r));
+	}
+
+	main();
+</script>
+
+</html>

@@ -1,7 +1,7 @@
 ---
-title: What is Trump's Policy on NATO & Ukraine?
+title: Predicting Trump's Policy on NATO & Ukraine
 published: 2024-11-30 12:04:00 -08
-updated: 2024-11-30 12:04:00 -08
+updated: 2024-12-26 12:04:00 -05
 ---
 
 ::: disclaimer
@@ -88,6 +88,10 @@ Now, none of this is to endorse Trump or his foreign policy. I do not mean to su
 ## Conclusion
 
 I hope you guys liked this foreign policy-based post. I plan on making programming content on this blog but I just felt like I had to write about this. Anyways, thanks for reading and I would love to see your comments.
+
+## Updates
+
+1. Changed the name from "What is Trump's Policy on NATO & Ukraine" to "Predicting Trump's Policy on NATO & Ukraine" _(2024-12-26)_
 
 [^1]: <https://www.calameo.com/read/005151365f835f7261566>
 [^2]: <https://www.nato.int/cps/en/natohq/topics_52044.htm>

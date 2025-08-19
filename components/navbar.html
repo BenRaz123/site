@@ -1,6 +1,75 @@
+<!-- 
+Dont see youself through the eyes of someone else
+- Me 2025
+-->
 <nav>
-    <a id="self-link" href="/">benraz.dev</a>
+    <a id="self-link" href="/">
+        <img src="/assets/pfp.png" />
+        <span id="self-link-text">benraz.dev</span>
+    </a>
+    <header id="nav-article-title"></header>
     <div class="links-wrapper">
-        <a href="/about.html">about</a><span class="delim"> | </span><a href="/blog">blog</a><span class="delim"> | </span><a href="https://github.com/benraz123">github</a><span class="delim"> | </span><a href="https://crates.io/users/BenRaz123?sort=recent-updates">crates.io</a>
+        <a href="/social.html">social/contact</a>
+        <span class="delim"> | </span>
+        <a href="/projects.html">projects</a>
+        <span class="delim"> | </span>
+        <a href="/blog">blog</a>
     </div>
 </nav>
+
+<script defer>
+    const header = document.querySelector("#blogheaders");
+    console.log(header);
+
+    function removeNavbar() {
+        for (const elem of document.querySelectorAll("nav")[0].children) {
+            if (elem.id != "nav-article-title") {
+                elem.style.display = "none";
+            }
+        }
+    }
+
+    function reenableNavbar() {
+        for (const elem of document.querySelectorAll("nav")[0].children) {
+            elem.style.display = "";
+        }
+    }
+
+
+    if (window.innerWidth < 500) {
+        if (document.querySelectorAll("body")[0].hasAttribute("blogpost")) {
+            const nav = document.querySelectorAll("nav")[0];
+            window.addEventListener("scroll", () => {
+                const header = document.querySelector("#blogheaders");
+                const nav = document.querySelectorAll("nav")[0];
+                if (window.scrollY > header.offsetTop + header.offsetHeight) {
+                    removeNavbar();
+                    document.querySelector("#nav-article-title").innerHTML = `<a href="/"><img src="/assets/pfp.png"/></a><span> / ${document.querySelectorAll("h1")[0].innerHTML}</span>`;
+                    nav.style.justifyContent = "center";
+                    nav.style.borderBottomColor = "var(--accent)";
+                }
+                if (window.scrollY < header.offsetTop + header.offsetHeight) {
+                    reenableNavbar();
+                    document.querySelector("#nav-article-title").innerHTML = ""
+                    nav.style.justifyContent = "space-between";
+                    nav.style.borderBottomColor = "";
+                }
+            });
+        }
+    } else if (window.innerWidth > 950) {
+        if (document.querySelectorAll("body")[0].hasAttribute("blogpost")) {
+            window.addEventListener("scroll", () => {
+            	const nav = document.querySelectorAll("nav")[0];
+                const header = document.querySelector("#blogheaders");
+                if (window.scrollY > header.offsetTop + header.offsetHeight) {
+                    document.querySelector("#nav-article-title").innerHTML = document.querySelectorAll("h1")[0].innerHTML;
+                    nav.style.borderBottomColor = "var(--accent)";
+                }
+                if (window.scrollY < header.offsetTop + header.offsetHeight) {
+                    document.querySelector("#nav-article-title").innerHTML = ""
+                    nav.style.borderBottomColor = "";
+                }
+            })
+        }
+    }
+</script>

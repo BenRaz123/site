@@ -15,13 +15,14 @@
     $nav$
     <div class="main-container">
         <main>
-            <div class="nav-links-container-container">
-                <div class="nav-links-container">
-                    <a href="/">&lt;&lt; home</a><noscript class="hide">
-                    </noscript>
-                    <a href="/blog">&lt; blog</a>
-                </div>
-                <!--
+            <header class="article-header">
+                <div class="nav-links-container-container">
+                    <div class="nav-links-container">
+                        <a href="/">&lt;&lt; home</a><noscript class="hide">
+                        </noscript>
+                        <a href="/blog">&lt; blog</a>
+                    </div>
+                    <!--
                 <div class="share-links-container">
                     <select id="share-links" onchange="location=this.value">
                         <option value="#" hidden disabled selected>Share &gt;&gt;</option>
@@ -36,32 +37,48 @@
                     </select>
                 </div>
                 -->
-                <a onclick="document.querySelector('#share').showModal()" href="#">share &gt;&gt;</a>
-                <dialog id="share">
-                    <div class="dialog-content">
-                        <header>Select a Platform</header>
-                        <ul>
-                            <a target="_blank" onclick="document.querySelector('#share').close()" href="https://x.com/intent/post?url=$url$"><li>X (Twitter)</li></a>
-                            <a target="_blank" onclick="document.querySelector('#share').close()" href="https://bsky.app/intent/compose?text=$url$"><li>Bluesky</li></a>
-                            <a target="_blank" onclick="document.querySelector('#share').close()" href="https://mastodonshare.com/?url=$url$"><li>Mastodon</li></a>
-                            <a target="_blank" onclick="document.querySelector('#share').close()" href="https://www.facebook.com/sharer/sharer.php?u=$url$"><li>FaceBook</li></a>
-                            <a target="_blank" onclick="document.querySelector('#share').close()" href="https://news.ycombinator.com/submitlink?u=$url$"><li>Hacker News</li></a>
-                        </ul>
-                    </div>
-                    <div class="dialog-buttons" onclick="document.querySelector('#share').close();">
-                        <form method="dialog">
-                            <button type="submit">Close</button>
-                        </form>
-                    </div>
-                </dialog>
-            </div>
-	    <hgroup>
-	    <h1>$title$</h1>
-            <span>Published $published$</span><br>
-            $if(showupdated)$
-            <span>Updated $updated$</span>
-            $endif$
-	    </hgroup>
+                    <a onclick="document.querySelector('#share').showModal()" href="#">share &gt;&gt;</a>
+                    <dialog id="share">
+                        <div class="dialog-content">
+                            <header>Select a Platform</header>
+                            <ul>
+                                <a target="_blank" onclick="document.querySelector('#share').close()"
+                                    href="https://x.com/intent/post?url=$url$">
+                                    <li>X (Twitter)</li>
+                                </a>
+                                <a target="_blank" onclick="document.querySelector('#share').close()"
+                                    href="https://bsky.app/intent/compose?text=$url$">
+                                    <li>Bluesky</li>
+                                </a>
+                                <a target="_blank" onclick="document.querySelector('#share').close()"
+                                    href="https://mastodonshare.com/?url=$url$">
+                                    <li>Mastodon</li>
+                                </a>
+                                <a target="_blank" onclick="document.querySelector('#share').close()"
+                                    href="https://www.facebook.com/sharer/sharer.php?u=$url$">
+                                    <li>FaceBook</li>
+                                </a>
+                                <a target="_blank" onclick="document.querySelector('#share').close()"
+                                    href="https://news.ycombinator.com/submitlink?u=$url$">
+                                    <li>Hacker News</li>
+                                </a>
+                            </ul>
+                        </div>
+                        <div class="dialog-buttons" onclick="document.querySelector('#share').close();">
+                            <form method="dialog">
+                                <button type="submit">Close</button>
+                            </form>
+                        </div>
+                    </dialog>
+                </div>
+                <hgroup id="blogheaders">
+                    <h1>$title$</h1>
+                    <span>Published $published$</span><br>
+                    $if(showupdated)$
+                    <span>Updated $updated$</span>
+                    $endif$
+                </hgroup>
+            </header>
             <hr>
             $body$
             <hr>
